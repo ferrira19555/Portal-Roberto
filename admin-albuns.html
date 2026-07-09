@@ -1,0 +1,146 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Administrar Albuns</title>
+    <style>
+      :root { --bg: #e8eee9; --ink: #14201e; --muted: #5a6864; --panel: #f7faf7; --line: #cbd8d2; --primary: #15967f; --danger: #b42318; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--bg); }
+      main { width: min(1080px, 100%); margin: 0 auto; padding: 22px 16px 46px; }
+      header { padding: 22px 0 18px; }
+      h1 { margin: 0 0 8px; font-size: clamp(1.9rem, 5vw, 3rem); }
+      p { color: var(--muted); line-height: 1.5; }
+      .panel { margin-bottom: 16px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); box-shadow: 0 14px 34px rgba(28,48,43,.12); }
+      label { display: grid; gap: 7px; margin-bottom: 12px; color: var(--muted); }
+      input { min-height: 46px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fff; color: var(--ink); }
+      input[type="file"] { padding: 11px; }
+      button, .button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 14px; border-radius: 8px; border: 1px solid transparent; background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer; text-decoration: none; }
+      button.danger { background: var(--danger); }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .message { min-height: 22px; margin: 12px 0 0; color: var(--muted); }
+      .message.ok { color: #167a45; font-weight: 700; }
+      .message.error { color: var(--danger); font-weight: 700; }
+      .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+      .photo { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+      .photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+      .photo div { display: grid; gap: 8px; padding: 10px; }
+      .photo small { color: var(--muted); overflow-wrap: anywhere; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Administrar albuns</h1>
+        <p>Use esta tela no notebook para adicionar ou remover fotos do album Por do sol e paisagens.</p>
+      </header>
+
+      <section class="panel">
+        <label>Senha de administracao
+          <input id="adminCode" type="password" autocomplete="current-password" placeholder="Digite a senha" />
+        </label>
+        <label>Adicionar fotos
+          <input id="photoFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+        </label>
+        <div class="actions">
+          <button id="uploadButton" type="button">Enviar fotos</button>
+          <button id="refreshButton" type="button">Atualizar lista</button>
+          <a class="button" href="index.html#albuns">Voltar ao portal</a>
+        </div>
+        <p id="message" class="message"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Fotos no album</h2>
+        <div id="gallery" class="gallery"></div>
+      </section>
+    </main>
+
+    <script>
+      const adminCode = document.getElementById("adminCode");
+      const photoFiles = document.getElementById("photoFiles");
+      const uploadButton = document.getElementById("uploadButton");
+      const refreshButton = document.getElementById("refreshButton");
+      const gallery = document.getElementById("gallery");
+      const message = document.getElementById("message");
+
+      function setMessage(text, kind = "") {
+        message.textContent = text || "";
+        message.className = kind ? `message ${kind}` : "message";
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      async function loadPhotos() {
+        const response = await fetch("/api/album/photos");
+        const data = await response.json();
+        const photos = data.photos || [];
+        gallery.innerHTML = photos.map((photo) => `
+          <article class="photo">
+            <img src="${photo.url}" alt="${escapeHtml(photo.name)}" />
+            <div>
+              <small>${escapeHtml(photo.name)}</small>
+              <button class="danger" type="button" data-delete="${escapeHtml(photo.name)}">Apagar</button>
+            </div>
+          </article>
+        `).join("") || `<p class="message">Nenhuma foto no album ainda.</p>`;
+      }
+
+      async function uploadPhotos() {
+        if (!adminCode.value.trim()) {
+          setMessage("Digite a senha de administracao.", "error");
+          return;
+        }
+        if (!photoFiles.files.length) {
+          setMessage("Escolha uma ou mais fotos.", "error");
+          return;
+        }
+        const formData = new FormData();
+        for (const file of photoFiles.files) formData.append("photos", file);
+        setMessage("Enviando fotos...");
+        const response = await fetch("/api/album/photos", {
+          method: "POST",
+          headers: { "X-Admin-Code": adminCode.value.trim() },
+          body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Nao foi possivel enviar.");
+        photoFiles.value = "";
+        setMessage(`Fotos enviadas: ${data.saved.length}.`, "ok");
+        await loadPhotos();
+      }
+
+      async function deletePhoto(name) {
+        if (!adminCode.value.trim()) {
+          setMessage("Digite a senha de administracao.", "error");
+          return;
+        }
+        if (!confirm(`Apagar esta foto?\n\n${name}`)) return;
+        const response = await fetch(`/api/album/photos?name=${encodeURIComponent(name)}`, {
+          method: "DELETE",
+          headers: { "X-Admin-Code": adminCode.value.trim() },
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Nao foi possivel apagar.");
+        setMessage("Foto apagada.", "ok");
+        await loadPhotos();
+      }
+
+      uploadButton.addEventListener("click", () => uploadPhotos().catch((error) => setMessage(error.message, "error")));
+      refreshButton.addEventListener("click", () => loadPhotos().catch((error) => setMessage(error.message, "error")));
+      gallery.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-delete]");
+        if (button) deletePhoto(button.dataset.delete).catch((error) => setMessage(error.message, "error"));
+      });
+
+      loadPhotos().catch((error) => setMessage(error.message, "error"));
+    </script>
+  </body>
+</html>

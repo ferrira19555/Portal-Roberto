@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeautyControl - Download</title>
+    <style>
+      :root {
+        --bg: #17121b;
+        --panel: #fff7fa;
+        --ink: #30232d;
+        --muted: #6f5b69;
+        --accent: #c06c84;
+        --accent-dark: #9d4f68;
+        --line: rgba(48, 35, 45, .16);
+        --shadow: 0 22px 56px rgba(23, 18, 27, .26);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: #f7edf2;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .hero {
+        min-height: 92vh;
+        display: grid;
+        align-items: center;
+        background:
+          linear-gradient(90deg, rgba(23, 18, 27, .93), rgba(23, 18, 27, .72)),
+          url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=80") center/cover;
+        color: #fff;
+        padding: 52px 24px;
+      }
+
+      .hero-inner {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 34px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+        padding: 8px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, .94);
+      }
+
+      .brand strong,
+      .brand span {
+        display: block;
+      }
+
+      .brand span {
+        opacity: .82;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 7vw, 6rem);
+        line-height: .94;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 680px;
+        margin: 24px 0 28px;
+        font-size: 1.12rem;
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      .button.secondary {
+        background: transparent;
+        border-color: rgba(255, 255, 255, .54);
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: -42px auto 48px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+      }
+
+      .item {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+        background: #fff;
+      }
+
+      .item h2 {
+        margin: 0 0 8px;
+        font-size: 1.05rem;
+      }
+
+      .item p,
+      .note {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .download {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .download-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .download-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+        background: #fff;
+      }
+
+      .download-card h2 {
+        margin: 0 0 8px;
+        font-size: 1.08rem;
+      }
+
+      .download-card p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .download-card .button {
+        width: 100%;
+      }
+
+      .file {
+        color: var(--muted);
+        font-size: .9rem;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 720px) {
+        .hero {
+          min-height: 86vh;
+          padding: 34px 18px;
+        }
+
+        main {
+          margin-top: -24px;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="brand">
+          <img src="assets/beautycontrol-icon.svg" alt="BeautyControl" />
+          <div>
+            <strong>BeautyControl</strong>
+            <span>Gestao de saloes para Android, Windows e macOS</span>
+          </div>
+        </div>
+        <h1>BeautyControl</h1>
+        <p class="lead">
+          Controle agenda, clientes, servicos, profissionais, produtos e bloqueios de horario.
+          Para saloes com recepcao ou caixa, use a versao Windows ou macOS no desktop.
+        </p>
+        <div class="actions">
+          <a class="button" href="#downloads">Baixar BeautyControl</a>
+          <a class="button secondary" href="index.html">Voltar para a central</a>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="panel" id="downloads">
+        <div class="grid">
+          <article class="item">
+            <h2>Android</h2>
+            <p>Roda direto no celular e salva os dados no proprio aparelho.</p>
+          </article>
+          <article class="item">
+            <h2>Windows</h2>
+            <p>Indicado para recepcao, caixa e uso diario em computador do salao.</p>
+          </article>
+          <article class="item">
+            <h2>macOS</h2>
+            <p>Opcao para saloes que usam Mac na administracao.</p>
+          </article>
+        </div>
+
+        <div class="download-list">
+          <article class="download-card">
+            <h2>Android</h2>
+            <p>Experiencia 30 dias. Nao precisa de servidor externo.</p>
+            <a class="button" href="apps/BeautyControl-30D-local.apk?v=20260613-2026" download>Baixar APK Android</a>
+            <span class="file">apps/BeautyControl-30D-local.apk</span>
+          </article>
+
+          <article class="download-card">
+            <h2>Windows</h2>
+            <p>Instalador para desktop com licenca do BeautyControl.</p>
+            <a class="button" href="apps/BeautyControl-Windows-Com-Licenca.zip?v=20260614-0900" download>Baixar Windows</a>
+            <span class="file">apps/BeautyControl-Windows-Com-Licenca.zip</span>
+          </article>
+
+          <article class="download-card">
+            <h2>macOS</h2>
+            <p>Pacote para instalar e abrir o BeautyControl no Mac.</p>
+            <a class="button" href="apps/BeautyControl-macOS-Instalador.zip?v=20260614-0900" download>Baixar macOS</a>
+            <span class="file">apps/BeautyControl-macOS-Instalador.zip</span>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
