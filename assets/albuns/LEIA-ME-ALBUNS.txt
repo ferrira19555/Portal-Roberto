@@ -1,0 +1,33 @@
+﻿ALBUNS DE FOTOS DA PAGINA
+
+Pagina do portal:
+http://localhost:8080
+
+Painel para administrar fotos:
+http://localhost:8080/admin-albuns.html
+
+Senha de administracao:
+roberto2026
+
+Como adicionar fotos pelo painel:
+1. Abra iniciar-site.bat na pasta pagina-apps.
+2. No navegador, abra http://localhost:8080/admin-albuns.html
+3. Digite a senha.
+4. Clique em Escolher arquivos e selecione uma ou mais fotos.
+5. Clique em Enviar fotos.
+6. Volte ao portal e aperte F5 para ver a galeria atualizada.
+
+Como apagar fotos pelo painel:
+1. Abra http://localhost:8080/admin-albuns.html
+2. Digite a senha.
+3. Clique em Apagar na foto desejada.
+4. Confirme.
+
+Pasta principal dos albuns:
+assets\albuns
+
+Album atual:
+assets\albuns\por-do-sol-e-paisagens
+
+Observacao:
+Se a pagina ja estava aberta antes desta melhoria, feche a janela preta do servidor e abra novamente o iniciar-site.bat.
