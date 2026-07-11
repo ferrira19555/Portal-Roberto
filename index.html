@@ -561,7 +561,7 @@
       .lightbox-bar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 12px;
         width: min(1120px, 100%);
         margin: 0 auto;
@@ -596,8 +596,17 @@
         box-shadow: 0 20px 54px rgba(0, 0, 0, 0.36);
       }
 
-      #photoDownload {
-        justify-self: center;
+      .lightbox-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .lightbox-actions .button,
+      .lightbox-actions .lightbox-close {
+        min-height: 48px;
       }
       .footer {
         padding: 24px 18px;
@@ -914,12 +923,14 @@
     <div class="photo-lightbox" id="photoLightbox" hidden>
       <div class="lightbox-bar">
         <strong id="photoLightboxTitle">Foto do album</strong>
-        <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao album</button>
       </div>
       <div class="lightbox-image-wrap">
         <img id="photoLightboxImage" alt="Foto ampliada" />
       </div>
-      <a class="button" id="photoDownload" href="#" download>Baixar foto sem metadados</a>
+      <div class="lightbox-actions">
+        <a class="button" id="photoDownload" href="#" download>Baixar foto</a>
+        <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao álbum</button>
+      </div>
     </div>
     <footer class="footer">
       Portal do Roberto - aplicativos, ferramentas e fotografias
@@ -1048,6 +1059,7 @@
       const photoLightboxTitle = document.getElementById("photoLightboxTitle");
       const photoLightboxClose = document.getElementById("photoLightboxClose");
       const photoDownload = document.getElementById("photoDownload");
+      let photoLightboxHistoryActive = false;
 
       function openPhotoLightbox(link) {
         const src = link.getAttribute("data-photo") || link.getAttribute("href");
@@ -1058,12 +1070,23 @@
         photoDownload.href = src;
         photoLightbox.hidden = false;
         document.body.style.overflow = "hidden";
+        if (!photoLightboxHistoryActive) {
+          history.pushState({ photoLightbox: true }, "");
+          photoLightboxHistoryActive = true;
+        }
       }
 
-      function closePhotoLightbox() {
+      function closePhotoLightbox(fromHistory = false) {
+        if (photoLightbox.hidden) return;
         photoLightbox.hidden = true;
         photoLightboxImage.removeAttribute("src");
         document.body.style.overflow = "";
+        if (photoLightboxHistoryActive && !fromHistory) {
+          photoLightboxHistoryActive = false;
+          history.back();
+        } else {
+          photoLightboxHistoryActive = false;
+        }
       }
 
       photoLightboxClose.addEventListener("click", closePhotoLightbox);
@@ -1072,6 +1095,9 @@
       });
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && !photoLightbox.hidden) closePhotoLightbox();
+      });
+      window.addEventListener("popstate", () => {
+        if (!photoLightbox.hidden) closePhotoLightbox(true);
       });
 
       const albumPhotoStrip = document.getElementById("albumPhotoStrip");
