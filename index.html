@@ -692,7 +692,7 @@
             <img src="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg" alt="Paisagem noturna com cidade, mar e ceu" />
             <div>
               <h3>Por do sol e paisagens</h3>
-              <p>Fotos de mar, ceu, cidade e luzes do fim do dia. Album com <span id="albumPhotoCount">22</span> fotos.</p>
+              <p>Fotos de mar, céu, cidade, natureza e luzes registradas na região.</p>
               <a class="button" href="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg" data-photo="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg">Abrir foto</a>
             </div>
           </article>
@@ -1085,7 +1085,7 @@
 
       function renderAlbumPhotos(photos) {
         if (!albumPhotoStrip) return;
-        albumPhotoCount.textContent = String(photos.length);
+        if (albumPhotoCount) albumPhotoCount.textContent = String(photos.length);
         albumPhotoStrip.innerHTML = photos.map((photo) => `
           <a href="${photo.url}" data-photo="${photo.url}">
             <img src="${photo.url}" alt="${escapeHtml(photo.name.replace(/\.[^.]+$/, "").replace(/[_-]/g, " "))}" />
@@ -1094,13 +1094,20 @@
       }
 
       async function loadAlbumPhotos() {
-        try {
-          const response = await fetch("/api/album/photos");
-          if (!response.ok) return;
-          const data = await response.json();
-          renderAlbumPhotos(data.photos || []);
-        } catch (error) {
-          // Mantem as fotos fixas se o portal for aberto sem o servidor local.
+        const sources = [
+          "/api/album/photos",
+          "assets/albuns/por-do-sol-e-paisagens/album.json",
+        ];
+        for (const source of sources) {
+          try {
+            const response = await fetch(source, { cache: "no-store" });
+            if (!response.ok) continue;
+            const data = await response.json();
+            renderAlbumPhotos(data.photos || []);
+            return;
+          } catch (error) {
+            // Tenta a proxima fonte; as fotos fixas continuam como ultimo recurso.
+          }
         }
       }
 
