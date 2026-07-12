@@ -586,6 +586,24 @@
         background: #dbe8e4;
       }
 
+      .lightbox-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .lightbox-download {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        background: var(--primary);
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
       .lightbox-image-wrap {
         display: grid;
         place-items: center;
@@ -625,7 +643,7 @@
           min-height: 88vh;
           background:
             linear-gradient(180deg, rgba(7, 14, 18, 0.94), rgba(7, 14, 18, 0.72)),
-            url("assets/foto-praia-noturna.jpg") center / cover no-repeat,
+            url("https://ferrira19555.github.io/Portal-Roberto/assets/capa-portal-roberto.jpg") center / cover no-repeat,
             #14201e;
           align-items: start;
           padding-top: 22px;
@@ -641,37 +659,37 @@
       }
       /* Visual papel pardo do Portal Roberto */
       :root {
-        --bg: #b58a58;
-        --ink: #2a1a0f;
-        --muted: #62462d;
-        --panel: #d8b986;
-        --soft-panel: #cba872;
-        --line: #8f673e;
-        --shadow: 0 14px 34px rgba(55, 31, 13, 0.24);
+        --bg: #c7aa80;
+        --ink: #3b2c20;
+        --muted: #6d5945;
+        --panel: #d5bc96;
+        --soft-panel: #ceb38b;
+        --line: #b3956e;
+        --shadow: 0 10px 26px rgba(70, 49, 30, 0.15);
       }
 
       body {
-        background-color: #b58a58;
+        background-color: #c7aa80;
         background-image:
           radial-gradient(circle at 18% 12%, rgba(255,255,255,0.10), transparent 30%),
           repeating-linear-gradient(8deg, rgba(70,42,20,0.035) 0, rgba(70,42,20,0.035) 1px, transparent 1px, transparent 6px);
       }
 
       .visual-band {
-        background: linear-gradient(180deg, #4a3422 0%, #b58a58 100%);
+        background: linear-gradient(180deg, #6d5945 0%, #c7aa80 100%);
       }
 
       .visual-inner,
       .portal-section,
       .download-card,
       .unlock-panel {
-        background: #d8b986;
-        border-color: #8f673e;
+        background: #d5bc96;
+        border-color: #b3956e;
       }
 
       .album-card {
-        background: #cba872;
-        border-color: #8f673e;
+        background: #ceb38b;
+        border-color: #b3956e;
       }
 
       .ache-panel {
@@ -985,7 +1003,10 @@
     <div class="photo-lightbox" id="photoLightbox" hidden>
       <div class="lightbox-bar">
         <strong id="photoLightboxTitle">Foto do album</strong>
-        <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao album</button>
+        <div class="lightbox-actions">
+          <a class="lightbox-download" id="photoLightboxDownload" href="#" download>Baixar foto</a>
+          <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao album</button>
+        </div>
       </div>
       <div class="lightbox-image-wrap">
         <img id="photoLightboxImage" alt="Foto ampliada" />
@@ -1117,6 +1138,7 @@
       const photoLightboxImage = document.getElementById("photoLightboxImage");
       const photoLightboxTitle = document.getElementById("photoLightboxTitle");
       const photoLightboxClose = document.getElementById("photoLightboxClose");
+      const photoLightboxDownload = document.getElementById("photoLightboxDownload");
 
       function openPhotoLightbox(link) {
         const src = link.getAttribute("data-photo") || link.getAttribute("href");
@@ -1124,22 +1146,38 @@
         photoLightboxImage.src = src;
         photoLightboxImage.alt = image ? image.alt : "Foto ampliada";
         photoLightboxTitle.textContent = image ? image.alt : "Foto do album";
+        photoLightboxDownload.href = src;
         photoLightbox.hidden = false;
         document.body.style.overflow = "hidden";
+        if (!history.state || !history.state.photoLightboxOpen) {
+          history.pushState({ photoLightboxOpen: true }, "", "#foto-aberta");
+        }
       }
 
       function closePhotoLightbox() {
         photoLightbox.hidden = true;
         photoLightboxImage.removeAttribute("src");
+        photoLightboxDownload.href = "#";
         document.body.style.overflow = "";
       }
 
-      photoLightboxClose.addEventListener("click", closePhotoLightbox);
+      function returnToAlbum() {
+        if (history.state && history.state.photoLightboxOpen) {
+          history.back();
+        } else {
+          closePhotoLightbox();
+        }
+      }
+
+      photoLightboxClose.addEventListener("click", returnToAlbum);
       photoLightbox.addEventListener("click", (event) => {
-        if (event.target === photoLightbox) closePhotoLightbox();
+        if (event.target === photoLightbox) returnToAlbum();
       });
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !photoLightbox.hidden) closePhotoLightbox();
+        if (event.key === "Escape" && !photoLightbox.hidden) returnToAlbum();
+      });
+      window.addEventListener("popstate", () => {
+        if (!photoLightbox.hidden) closePhotoLightbox();
       });
 
       const albumPhotoStrip = document.getElementById("albumPhotoStrip");
