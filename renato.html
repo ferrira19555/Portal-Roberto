@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mercado V21 - Controles Unificados</title>
+    <style>
+        /* --- BASE --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f0f0f;
+            color: white; margin: 0; padding: 0;
+            padding-bottom: 40px;
+        }
+
+        /* --- TELA INICIAL (MENU) --- */
+        #home-screen {
+            padding: 30px 20px;
+            display: flex; flex-direction: column; 
+            min-height: 100vh;
+        }
+
+        .app-title { text-align: left; margin-bottom: 25px; margin-top: 10px; }
+        .app-title h1 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -1px; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .app-title p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
+
+        .section-label {
+            color: #444; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 15px; margin-top: 10px; padding-left: 5px;
+        }
+
+        .menu-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px; }
+
+        .menu-btn {
+            background: #1c1c1c; border: 1px solid #333; color: white; width: 100%;
+            padding: 20px; border-radius: 20px; display: flex; align-items: center; gap: 20px;
+            cursor: pointer; position: relative; overflow: hidden; transition: transform 0.1s, background 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .menu-btn:active { transform: scale(0.97); background: #252525; }
+
+        .icon-box { 
+            width: 50px; height: 50px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; flex-shrink: 0;
+        }
+
+        .btn-content { display: flex; flex-direction: column; align-items: flex-start; }
+        .btn-title { font-size: 1.1rem; font-weight: 700; color: #eee; }
+        .btn-desc { font-size: 0.85rem; color: #888; margin-top: 4px; font-weight: 400; text-align: left; }
+
+        /* Estilos de Cores */
+        .style-weight .icon-box { background: rgba(76, 175, 80, 0.15); color: #81c784; }
+        .style-liquid .icon-box { background: rgba(33, 150, 243, 0.15); color: #64b5f6; }
+        .style-unit   .icon-box { background: rgba(255, 152, 0, 0.15); color: #ffb74d; }
+        .style-promo  .icon-box { background: rgba(233, 30, 99, 0.15); color: #f06292; }
+        .style-whole  .icon-box { background: rgba(255, 215, 0, 0.15); color: #ffd54f; }
+        .style-cart   .icon-box { background: rgba(156, 39, 176, 0.15); color: #ce93d8; } 
+
+        /* --- APP GERAL --- */
+        .app-screen { display: none; min-height: 100vh; background: #0f0f0f; }
+
+        .app-header {
+            position: sticky; top: 0; z-index: 100;
+            background-color: rgba(28, 28, 28, 0.95); backdrop-filter: blur(10px);
+            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #333; height: 65px;
+        }
+        .header-btn { background: transparent; border: none; color: #fff; font-size: 1.5rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; }
+        .header-title { font-size: 1rem; font-weight: 700; color: #fff; }
+        
+        #products-list { padding: 20px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 100px; max-width: 600px; margin: 0 auto; }
+
+        /* Estilos do Comparador (Cards) */
+        .card { background-color: #1c1c1c; border-radius: 20px; overflow: hidden; border: 1px solid #333; }
+        .card-header { background-color: #252525; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 0.85rem; color: #aaa; font-weight: 800; letter-spacing: 1px; }
+        .remove-btn { color: #ef5350; background: none; border: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; padding: 5px; cursor: pointer; }
+        .card-body { padding: 20px; }
+        
+        label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 8px; font-weight: 500; }
+        input.main-field { width: 100%; background: #2a2a2a; border: 1px solid #444; color: white; padding: 15px; border-radius: 12px; font-size: 1.2rem; margin-bottom: 20px; transition: border 0.2s; }
+        input.main-field:focus { outline: none; border-color: #BB86FC; background: #333; }
+
+        .qty-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 0; border: 1px solid #444; border-radius: 12px; background: #2a2a2a; height: 55px; margin-bottom: 20px; }
+        .qty-grid input { border: none; background: transparent; height: 100%; padding: 15px; font-size: 1.2rem; width: 100%; color: white; }
+        .qty-grid input:focus { outline: none; }
+        .qty-grid select { border: none; border-left: 1px solid #444; background: #333; color: #BB86FC; font-weight: bold; height: 100%; width: 100%; padding: 0 10px; font-size: 1rem; border-radius: 0 12px 12px 0; text-align: center; }
+
+        .result-container { border-top: 1px solid #333; padding-top: 15px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .unit-price { font-size: 1.5rem; font-weight: 800; color: #fff; }
+        .total-helper { font-size: 0.85rem; color: #ffca28; margin-top: 2px; }
+        .card.winner { border: 2px solid #00E676; box-shadow: 0 0 15px rgba(0, 230, 118, 0.1); }
+        .card.winner .card-header { background: #0A1F13; }
+        .card.winner .unit-price { color: #00E676; }
+        .card.winner .badge { background: #00E676; color: black; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
+        .card.loser { opacity: 0.7; }
+        .card.loser .badge { background: #333; color: #ef5350; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem;}
+
+        .fab-container { position: fixed; bottom: 30px; left: 0; right: 0; display: flex; justify-content: center; z-index: 100; pointer-events: none; }
+        .add-btn { pointer-events: auto; background: #fff; color: #000; border: none; padding: 16px 30px; border-radius: 50px; font-size: 1rem; font-weight: 800; box-shadow: 0 10px 30px rgba(255,255,255,0.2); display: flex; align-items: center; gap: 10px; transition: transform 0.2s; cursor: pointer; }
+        .add-btn:active { transform: scale(0.95); }
+
+        /* --- ESTILOS CALCULADORA DE CARRINHO E FERRAMENTAS --- */
+        #shop-container { padding: 20px; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        
+        .total-display-box {
+            background: #252525; border: 1px solid #333; border-radius: 20px;
+            padding: 20px; text-align: right; margin-bottom: 10px;
+        }
+        .total-label { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .total-value { font-size: 3rem; font-weight: 800; color: #ce93d8; margin-top: 5px; }
+
+        .shop-input-area {
+            background: #1c1c1c; padding: 20px; border-radius: 20px; border: 1px solid #333;
+        }
+        .shop-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        
+        /* CONTROLE DE QUANTIDADE UNIVERSAL */
+        .qty-controls {
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid #444; border-radius: 12px; background: #2a2a2a; 
+            height: 55px; width: 100%; min-width: 120px; overflow: hidden;
+        }
+        .qty-btn { 
+            width: 45px; height: 100%; background: #333; border: none; 
+            color: #BB86FC; font-size: 1.5rem; font-weight: bold; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center;
+        }
+        .qty-btn:active { background: #BB86FC; color: black; }
+        .qty-val { 
+            flex: 1; text-align: center; font-size: 1.3rem; font-weight: bold; 
+            border: none; background: transparent; color: white; width: 40px;
+        }
+
+        .btn-add-cart {
+            width: 100%; background: #ce93d8; color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 10px;
+        }
+        .btn-add-cart:active { transform: scale(0.98); opacity: 0.9; }
+        .btn-add-cart.success { background: #00E676; color: #000; }
+
+        #shop-history-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 80px; }
+        .shop-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #1c1c1c; padding: 15px; border-radius: 12px; border: 1px solid #333;
+            animation: slideIn 0.2s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .shop-item-left { display: flex; flex-direction: column; }
+        .shop-item-price { font-size: 1.1rem; font-weight: bold; color: #fff; }
+        .shop-item-desc { font-size: 0.85rem; color: #888; }
+        
+        .shop-item-del {
+            background: rgba(239, 83, 80, 0.15); color: #ef5350; border: none;
+            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer;
+        }
+
+        /* --- OUTRAS CALCULADORAS --- */
+        .calc-container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .calc-select { width: 100%; padding: 15px; background: #2a2a2a; color: #BB86FC; border: 1px solid #444; border-radius: 12px; margin-bottom: 25px; font-size: 1.1rem; }
+        .calc-group { display: none; flex-direction: column; }
+        .calc-group.active { display: flex; animation: fadeUp 0.3s; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .result-box { background: #252525; border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; margin-top: 30px; }
+        .res-label { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .res-value { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
+        .res-sub { font-size: 1rem; color: #ccc; }
+        .res-promo .res-value { color: #f06292; } 
+        .res-whole .res-value { color: #ffd54f; }
+
+    </style>
+</head>
+<body>
+
+    <!-- MENU PRINCIPAL -->
+    <div id="home-screen">
+        <div class="app-title">
+            <h1>Comparador</h1>
+            <p>Seu assistente de mercado</p>
+        </div>
+
+        <div class="section-label">Comparar Preços</div>
+        <div class="menu-grid">
+            <button class="menu-btn style-weight" onclick="openComparator('weight')">
+                <div class="icon-box">🥦</div>
+                <div class="btn-content"><span class="btn-title">Por Peso</span><span class="btn-desc">Carnes, Verduras...</span></div>
+            </button>
+            <button class="menu-btn style-liquid" onclick="openComparator('volume')">
+                <div class="icon-box">🧃</div>
+                <div class="btn-content"><span class="btn-title">Por Líquido</span><span class="btn-desc">Bebidas, Óleos...</span></div>
+            </button>
+            <button class="menu-btn style-unit" onclick="openComparator('unit')">
+                <div class="icon-box">📦</div>
+                <div class="btn-content"><span class="btn-title">Por Unidade</span><span class="btn-desc">Fraldas, Latas...</span></div>
+            </button>
+        </div>
+
+        <div class="section-label">Minha Compra</div>
+        <div class="menu-grid">
+            <button class="menu-btn style-cart" onclick="openShopCalc()">
+                <div class="icon-box">🛒</div>
+                <div class="btn-content">
+                    <span class="btn-title">Calculadora de Carrinho</span>
+                    <span class="btn-desc">Some seus itens enquanto compra</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="section-label">Ferramentas</div>
+        <div class="menu-grid">
+            <button class="menu-btn style-promo" onclick="openPromoCalc()">
+                <div class="icon-box">🏷️</div>
+                <div class="btn-content"><span class="btn-title">Detetive de Ofertas</span><span class="btn-desc">A promoção é real?</span></div>
+            </button>
+            <button class="menu-btn style-whole" onclick="openWholesaleCalc()">
+                <div class="icon-box">🏗️</div>
+                <div class="btn-content"><span class="btn-title">Calculadora Atacado</span><span class="btn-desc">Vale o fardo?</span></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- COMPARADOR DE PREÇOS -->
+    <div id="comparator-screen" class="app-screen">
+        <div class="app-header">
+            <button class="header-btn" onclick="goHome()">❮</button>
+            <div class="header-title" id="page-title">Comparador</div>
+            <button class="header-btn" onclick="resetAll()">🗑️</button>
+        </div>
+        <div id="products-list"></div>
+        <div class="fab-container"><button class="add-btn" onclick="addProduct()">+ Novo Item</button></div>
+    </div>
+
+    <!-- CALCULADORA DE CARRINHO -->
+    <div id="shop-screen" class="app-screen">
+        <div class="app-header">
+            <button class="header-btn" onclick="goHome()">❮</button>
+            <div class="header-title">Meu Carrinho</div>
+            <button class="header-btn" onclick="clearCart()" style="color:#ef5350">🗑️</button>
+        </div>
+        
+        <div id="shop-container">
+            <div class="total-display-box">
+                <div class="total-label">Total da Compra</div>
+                <div class="total-value" id="shop-total-display">R$ 0,00</div>
+            </div>
+
+            <div class="shop-input-area">
+                <div class="shop-row">
+                    <div style="flex:1">
+                        <label>Preço do Item</label>
+                        <input type="number" id="shop-price" class="main-field" placeholder="0.00" inputmode="decimal" step="0.01">
+                    </div>
+                </div>
+                <div class="shop-row">
+                    <div style="flex:1">
+                         <label>Quantidade</label>
+                         <div class="qty-controls">
+                             <button class="qty-btn" onclick="changeInput('shop-qty', -1)">−</button>
+                             <input type="tel" id="shop-qty" class="qty-val" value="1" readonly>
+                             <button class="qty-btn" onclick="changeInput('shop-qty', 1)">+</button>
+                         </div>
+                    </div>
+                    <div style="flex:1.5; display:flex; align-items:flex-end;">
+                        <button class="btn-add-cart" onclick="addToCart()">+ ADICIONAR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-label" style="margin-bottom:5px">Itens Adicionados</div>
+            <div id="shop-history-list"></div>
+        </div>
+    </div>
+
+    <!-- DETETIVE DE OFERTAS -->
+    <div id="promo-screen" class="app-screen">
+        <div class="app-header">
+            <button class="header-btn" onclick="goHome()">❮</button>
+            <div class="header-title">Detetive de Ofertas</div>
+            <button class="header-btn" onclick="resetPromo()" style="color:#ef5350">🗑️</button>
+        </div>
+        <div class="calc-container">
+            <label>Tipo de Promoção</label>
+            <select id="calc-rule" class="calc-select" onchange="updateCalcUI()">
+                <option value="flat">💰 % Desconto no Total</option>
+                <option value="unit_base">📦 % Desconto por Unidade</option>
+                <option value="lxpy">🎁 Leve X, Pague Y</option>
+                <option value="d2u">🏷️ Desconto na 2ª Unidade</option>
+            </select>
+            
+            <div id="c-group-flat" class="calc-group">
+                <label>Preço Sem Desconto</label><input type="number" id="c-flat-price" class="main-field" placeholder="0.00" step="0.01" oninput="runCalc()">
+                <label>% Desconto</label><input type="number" id="c-flat-desc" class="main-field" value="25" step="0.1" oninput="runCalc()">
+            </div>
+            
+            <div id="c-group-unit" class="calc-group">
+                <label>Preço Unitário</label><input type="number" id="c-unit-price" class="main-field" placeholder="0.00" step="0.01" oninput="runCalc()">
+                <div style="display:flex; gap:10px">
+                    <div style="flex:1"><label>% OFF</label><input type="number" id="c-unit-desc" class="main-field" value="25" step="0.1" oninput="runCalc()"></div>
+                    <div style="flex:1.2">
+                        <label>Quantidade</label>
+                        <div class="qty-controls">
+                             <button class="qty-btn" onclick="changeInput('c-unit-qty', -1)">−</button>
+                             <input type="tel" id="c-unit-qty" class="qty-val" value="1" readonly>
+                             <button class="qty-btn" onclick="changeInput('c-unit-qty', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="c-group-lxpy" class="calc-group">
+                <label>Preço Unitário</label><input type="number" id="c-lxpy-price" class="main-field" placeholder="0.00" step="0.01" oninput="runCalc()">
+                <div style="display:flex; gap:10px; margin-bottom:15px">
+                    <div style="flex:1">
+                        <label>Leve (Qtd)</label>
+                        <div class="qty-controls">
+                             <button class="qty-btn" onclick="changeInput('c-lxpy-get', -1)">−</button>
+                             <input type="tel" id="c-lxpy-get" class="qty-val" value="3" readonly>
+                             <button class="qty-btn" onclick="changeInput('c-lxpy-get', 1)">+</button>
+                        </div>
+                    </div>
+                    <div style="flex:1">
+                        <label>Pague (Qtd)</label>
+                        <div class="qty-controls">
+                             <button class="qty-btn" onclick="changeInput('c-lxpy-pay', -1)">−</button>
+                             <input type="tel" id="c-lxpy-pay" class="qty-val" value="2" readonly>
+                             <button class="qty-btn" onclick="changeInput('c-lxpy-pay', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="c-group-d2u" class="calc-group">
+                <label>Preço Unitário</label><input type="number" id="c-d2u-price" class="main-field" placeholder="0.00" step="0.01" oninput="runCalc()">
+                <label>% Desc na 2ª</label><input type="number" id="c-d2u-desc" class="main-field" value="50" step="0.1" oninput="runCalc()">
+            </div>
+            
+            <div class="result-box res-promo">
+                <div class="res-label">Preço Real Unitário</div>
+                <div class="res-value" id="c-res-unit">R$ 0,00</div>
+                <div class="res-sub" id="c-res-total">Total: R$ 0,00</div>
+                <button id="btn-promo-add" class="btn-add-cart" onclick="addPromoToCart()">🛒 Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALCULADORA ATACADO -->
+    <div id="wholesale-screen" class="app-screen">
+        <div class="app-header">
+            <button class="header-btn" onclick="goHome()">❮</button>
+            <div class="header-title">Calculadora Atacado</div>
+            <button class="header-btn" onclick="resetWholesale()" style="color:#ef5350">🗑️</button>
+        </div>
+        <div class="calc-container">
+            <label>Produto Avulso</label>
+            <input type="number" id="w-single-price" class="main-field" placeholder="Preço unitário" step="0.01" oninput="calcWholesale()">
+
+            <label>Pacote Atacado</label>
+            <div style="display:flex; gap:10px; margin-bottom:20px">
+                <input type="number" id="w-pack-price" class="main-field" placeholder="Preço do pacote" step="0.01" oninput="calcWholesale()" style="flex:2">
+                <div style="flex:1">
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="changeInput('w-pack-qty', -1)">−</button>
+                        <input type="tel" id="w-pack-qty" class="qty-val" value="6" readonly>
+                        <button class="qty-btn" onclick="changeInput('w-pack-qty', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-box res-whole">
+                <div class="res-label">Preço por Unidade</div>
+                <div class="res-value" id="w-res-single">R$ 0,00</div>
+                <div class="res-sub">Avulso</div>
+                <div class="res-value" id="w-res-pack">R$ 0,00</div>
+                <div class="res-sub" id="w-res-diff"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado global
+        let currentMode = 'weight'; // weight, volume, unit
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('marketCart') || '[]');
+        let currentPromo = { unitPrice: 0, qty: 1 };
+
+        // Navegação
+        function goHome() {
+            document.getElementById('home-screen').style.display = 'flex';
+            document.querySelectorAll('.app-screen').forEach(s => s.style.display = 'none');
+        }
+
+        function openComparator(mode) {
+            currentMode = mode;
+            document.getElementById('page-title').textContent = 
+                mode === 'weight' ? 'Comparador por Peso' :
+                mode === 'volume' ? 'Comparador por Volume' : 'Comparador por Unidade';
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('comparator-screen').style.display = 'block';
+            products = [];
+            renderProducts();
+        }
+
+        function openShopCalc() {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('shop-screen').style.display = 'block';
+            renderCart();
+            updateTotal();
+        }
+
+        function openPromoCalc() {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('promo-screen').style.display = 'block';
+            updateCalcUI();
+            runCalc();
+        }
+
+        function openWholesaleCalc() {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('wholesale-screen').style.display = 'block';
+            calcWholesale();
+        }
+
+        // Comparador
+        function addProduct() {
+            products.push({ id: Date.now(), price: 0, qty: 1, unit: currentMode === 'weight' ? 'kg' : currentMode === 'volume' ? 'L' : 'un' });
+            renderProducts();
+        }
+
+        function removeProduct(id) {
+            products = products.filter(p => p.id !== id);
+            renderProducts();
+        }
+
+        function updateProduct(id, field, value) {
+            const p = products.find(p => p.id === id);
+            if (p) {
+                p[field] = parseFloat(value) || 0;
+                renderProducts();
+            }
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('products-list');
+            list.innerHTML = '';
+
+            if (products.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Toque em + Novo Item para começar</p>';
+                return;
+            }
+
+            // Calcular preço unitário
+            const validProducts = products.filter(p => p.price > 0 && p.qty > 0);
+            const unitPrices = validProducts.map(p => {
+                if (currentMode === 'weight') return p.price / p.qty; // R$/kg
+                if (currentMode === 'volume') return p.price / p.qty; // R$/L
+                return p.price / p.qty; // R$/un
+            });
+            const minPrice = Math.min(...unitPrices) || 0;
+
+            products.forEach(p => {
+                const unitPrice = p.price && p.qty ? p.price / p.qty : 0;
+                const isWinner = unitPrice > 0 && unitPrice === minPrice && unitPrices.length > 1;
+
+                const card = document.createElement('div');
+                card.className = `card ${isWinner ? 'winner' : unitPrice > 0 ? 'loser' : ''}`;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">Produto ${products.indexOf(p) + 1}</div>
+                        <button class="remove-btn" onclick="removeProduct(${p.id})">✕ Remover</button>
+                    </div>
+                    <div class="card-body">
+                        <label>Preço pago</label>
+                        <input type="number" class="main-field" placeholder="0.00" value="${p.price || ''}" step="0.01"
+                               oninput="updateProduct(${p.id}, 'price', this.value)">
+                        
+                        <div class="qty-grid">
+                            <input type="number" placeholder="Quantidade" value="${p.qty || ''}" step="0.01"
+                                   oninput="updateProduct(${p.id}, 'qty', this.value)">
+                            <select onchange="updateProduct(${p.id}, 'unit', this.value)">
+                                <option value="kg" ${p.unit==='kg'?'selected':''}>kg</option>
+                                <option value="g" ${p.unit==='g'?'selected':''}>g</option>
+                                <option value="L" ${p.unit==='L'?'selected':''}>L</option>
+                                <option value="ml" ${p.unit==='ml'?'selected':''}>ml</option>
+                                <option value="un" ${p.unit==='un'?'selected':''}>un</option>
+                            </select>
+                        </div>
+                        
+                        <div class="result-container">
+                            <div>
+                                <div class="unit-price">R$ ${unitPrice.toFixed(2)}</div>
+                                <div class="total-helper">por ${p.unit}</div>
+                            </div>
+                            ${isWinner ? '<div class="badge">MELHOR</div>' : unitPrice > 0 ? '<div class="badge">PIOR</div>' : ''}
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function resetAll() {
+            if (confirm('Limpar todos os itens?')) {
+                products = [];
+                renderProducts();
+            }
+        }
+
+        // Carrinho
+        function changeInput(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value) || 1;
+            val = Math.max(1, val + delta);
+            input.value = val;
+            if (id === 'shop-qty') return;
+            runCalc();
+            calcWholesale();
+        }
+
+        function addToCart() {
+            const price = parseFloat(document.getElementById('shop-price').value) || 0;
+            const qty = parseInt(document.getElementById('shop-qty').value) || 1;
+            if (price <= 0) return alert('Digite um preço válido');
+
+            cart.push({ price: price * qty, qty, singlePrice: price });
+            localStorage.setItem('marketCart', JSON.stringify(cart));
+            document.getElementById('shop-price').value = '';
+            document.getElementById('shop-qty').value = '1';
+            renderCart();
+            updateTotal();
+            
+            const btn = document.querySelector('#shop-screen .btn-add-cart');
+            btn.textContent = '✓ ADICIONADO';
+            btn.classList.add('success');
+            setTimeout(() => {
+                btn.textContent = '+ ADICIONAR';
+                btn.classList.remove('success');
+            }, 1000);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('marketCart', JSON.stringify(cart));
+            renderCart();
+            updateTotal();
+        }
+
+        function clearCart() {
+            if (confirm('Limpar todo o carrinho?')) {
+                cart = [];
+                localStorage.setItem('marketCart', JSON.stringify(cart));
+                renderCart();
+                updateTotal();
+            }
+        }
+
+        function renderCart() {
+            const list = document.getElementById('shop-history-list');
+            list.innerHTML = '';
+            if (cart.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Nenhum item adicionado ainda</p>';
+                return;
+            }
+            cart.forEach((item, i) => {
+                const el = document.createElement('div');
+                el.className = 'shop-item';
+                el.innerHTML = `
+                    <div class="shop-item-left">
+                        <div class="shop-item-price">R$ ${(item.price).toFixed(2)}</div>
+                        <div class="shop-item-desc">\( {item.qty} × R \) ${item.singlePrice.toFixed(2)}</div>
+                    </div>
+                    <button class="shop-item-del" onclick="removeFromCart(${i})">✕</button>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        function updateTotal() {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('shop-total-display').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+        }
+
+        // Detetive de Ofertas
+        function updateCalcUI() {
+            document.querySelectorAll('.calc-group').forEach(g => g.classList.remove('active'));
+            const rule = document.getElementById('calc-rule').value;
+            document.getElementById('c-group-' + rule).classList.add('active');
+            runCalc();
+        }
+
+        function runCalc() {
+            const rule = document.getElementById('calc-rule').value;
+            let unitPrice = 0;
+            let total = 0;
+            let qty = 1;
+
+            if (rule === 'flat') {
+                const price = parseFloat(document.getElementById('c-flat-price').value) || 0;
+                const desc = parseFloat(document.getElementById('c-flat-desc').value) || 0;
+                unitPrice = price * (1 - desc/100);
+                total = unitPrice;
+            } else if (rule === 'unit_base') {
+                const price = parseFloat(document.getElementById('c-unit-price').value) || 0;
+                const desc = parseFloat(document.getElementById('c-unit-desc').value) || 0;
+                qty = parseInt(document.getElementById('c-unit-qty').value) || 1;
+                unitPrice = price * (1 - desc/100);
+                total = unitPrice * qty;
+            } else if (rule === 'lxpy') {
+                const price = parseFloat(document.getElementById('c-lxpy-price').value) || 0;
+                const get = parseInt(document.getElementById('c-lxpy-get').value) || 1;
+                const pay = parseInt(document.getElementById('c-lxpy-pay').value) || 1;
+                qty = get;
+                unitPrice = (price * pay) / get;
+                total = unitPrice * get;
+            } else if (rule === 'd2u') {
+                const price = parseFloat(document.getElementById('c-d2u-price').value) || 0;
+                const desc = parseFloat(document.getElementById('c-d2u-desc').value) || 0;
+                qty = 2;
+                unitPrice = (price + price * (1 - desc/100)) / 2;
+                total = unitPrice * 2;
+            }
+
+            document.getElementById('c-res-unit').textContent = `R$ ${unitPrice.toFixed(2)}`;
+            document.getElementById('c-res-total').textContent = `Total \( {qty} un: R \) ${total.toFixed(2)}`;
+            currentPromo = { unitPrice, qty, total };
+        }
+
+        function addPromoToCart() {
+            if (currentPromo.unitPrice <= 0) return alert('Calcule uma promoção primeiro');
+            cart.push({ price: currentPromo.total, qty: currentPromo.qty, singlePrice: currentPromo.unitPrice });
+            localStorage.setItem('marketCart', JSON.stringify(cart));
+            alert(`Adicionado \( {currentPromo.qty} unidades por R \) ${currentPromo.total.toFixed(2)} ao carrinho!`);
+            openShopCalc();
+        }
+
+        function resetPromo() {
+            document.querySelectorAll('#promo-screen input, #promo-screen select').forEach(el => {
+                if (el.type === 'number') el.value = '';
+                if (el.id.includes('qty')) el.value = '1';
+            });
+            document.getElementById('c-flat-desc').value = '25';
+            document.getElementById('c-unit-desc').value = '25';
+            document.getElementById('c-d2u-desc').value = '50';
+            updateCalcUI();
+        }
+
+        // Atacado
+        function calcWholesale() {
+            const single = parseFloat(document.getElementById('w-single-price').value) || 0;
+            const packPrice = parseFloat(document.getElementById('w-pack-price').value) || 0;
+            const packQty = parseInt(document.getElementById('w-pack-qty').value) || 1;
+
+            const packUnit = packPrice / packQty;
+
+            document.getElementById('w-res-single').textContent = `R$ ${single.toFixed(2)}`;
+            document.getElementById('w-res-pack').textContent = `R$ ${packUnit.toFixed(2)}`;
+
+            if (single > 0 && packUnit > 0) {
+                const diff = ((single - packUnit) / single * 100).toFixed(1);
+                const better = packUnit < single ? 'pack' : 'single';
+                document.getElementById('w-res-diff').textContent = 
+                    better === 'pack' ? `Economia de ${diff}% comprando o pacote` : `Avulso é mais barato`;
+                document.getElementById('w-res-diff').style.color = better === 'pack' ? '#00E676' : '#ef5350';
+            } else {
+                document.getElementById('w-res-diff').textContent = '';
+            }
+        }
+
+        function resetWholesale() {
+            document.getElementById('w-single-price').value = '';
+            document.getElementById('w-pack-price').value = '';
+            document.getElementById('w-pack-qty').value = '6';
+            calcWholesale();
+        }
+
+        // Inicialização
+        goHome();
+        renderCart();
+        updateTotal();
+    </script>
+</body>
+</html>
