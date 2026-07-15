@@ -3,26 +3,26 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#15967f" />
+    <meta name="theme-color" content="#6f4a2f" />
     <title>Portal do Roberto - Aplicativos e Fotografias</title>
     <style>
       :root {
         color-scheme: light;
-        --bg: #e8eee9;
-        --ink: #14201e;
-        --muted: #5a6864;
-        --panel: #f7faf7;
-        --soft-panel: #eef4ef;
-        --line: #cbd8d2;
-        --primary: #15967f;
-        --primary-dark: #0f6f62;
-        --gold: #d7aa38;
+        --bg: #d8c3a5;
+        --ink: #2b1d14;
+        --muted: #665343;
+        --panel: #f3e5cc;
+        --soft-panel: #ead5b5;
+        --line: #b99b73;
+        --primary: #7a5032;
+        --primary-dark: #53351f;
+        --gold: #c6923e;
         --blue: #2f6f9f;
         --rose: #b14d66;
         --violet: #6656a8;
         --danger: #b42318;
         --ok: #167a45;
-        --shadow: 0 16px 42px rgba(28, 48, 43, 0.13);
+        --shadow: 0 16px 42px rgba(67, 43, 32, 0.18);
       }
 
       * {
@@ -42,8 +42,8 @@
         align-items: center;
         padding: 26px 18px 34px;
         background:
-          linear-gradient(100deg, rgba(7, 14, 18, 0.88), rgba(12, 24, 26, 0.58), rgba(7, 14, 18, 0.82)),
-          url("https://ferrira19555.github.io/Portal-Roberto/assets/capa-portal-roberto.jpg") center / cover no-repeat,
+          linear-gradient(100deg, rgba(7, 14, 18, 0.82), rgba(12, 24, 26, 0.38), rgba(7, 14, 18, 0.16)),
+          url("assets/capa-portal-roberto.jpg") center / cover no-repeat,
           #14201e;
         color: #ffffff;
       }
@@ -61,29 +61,21 @@
         margin-bottom: 42px;
       }
 
-      .brand img {
+      .portal-mark {
         width: 48px;
         height: 48px;
         border-radius: 12px;
-        background: var(--panel);
-        padding: 5px;
+        background: #ffffff;
+        color: #137d6d;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        letter-spacing: -0.06em;
       }
 
       .brand strong {
         display: block;
         font-size: 1.05rem;
-      }
-
-      .portal-mark {
-        display: grid;
-        place-items: center;
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        background: #ffffff;
-        color: #1a8f78;
-        font-weight: 800;
-        letter-spacing: 0.04em;
       }
 
       .brand span,
@@ -371,6 +363,10 @@
         border-top-color: var(--violet);
       }
 
+      .download-card.radio {
+        border-top-color: #78f4b2;
+      }
+
       .file-name {
         display: block;
         margin-top: 10px;
@@ -386,22 +382,27 @@
 
       .ache-panel {
         margin-bottom: 18px;
-        padding: 18px;
-        background: linear-gradient(135deg, #f8eef1, #edf5ef);
-        border: 1px solid var(--line);
-        border-left: 6px solid var(--rose);
-        border-radius: 8px;
-        box-shadow: var(--shadow);
+        padding: 22px;
+        background: #f7ead2;
+        border: 2px solid #9b7048;
+        border-top: 10px solid #6f4a2f;
+        border-radius: 12px;
+        box-shadow: 0 18px 46px rgba(97, 51, 37, 0.2);
       }
 
       .ache-panel h2 {
-        margin: 0 0 8px;
-        font-size: 1.35rem;
+        display: inline-block;
+        margin: 0 0 10px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        background: #6f4a2f;
+        color: #ffffff;
+        font-size: 1.45rem;
       }
 
       .ache-panel p {
         margin: 0 0 16px;
-        color: var(--muted);
+        color: #3c2a1d;
         line-height: 1.48;
       }
 
@@ -412,14 +413,29 @@
       }
 
       .ache-box {
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--soft-panel);
+        padding: 18px;
+        border: 1px solid #b69268;
+        border-radius: 10px;
+        background: #fffaf0;
+        box-shadow: 0 8px 22px rgba(80, 63, 55, 0.1);
       }
 
       .ache-box h3 {
         margin: 0 0 10px;
+        color: #563820;
+      }
+
+      .ache-box input {
+        background: #ffffff;
+        border-color: #a98259;
+      }
+
+      .ache-box button {
+        background: #7a5032;
+      }
+
+      .ache-box button:hover {
+        background: #53351f;
       }
 
       .ache-form {
@@ -552,7 +568,7 @@
         inset: 0;
         z-index: 20;
         display: grid;
-        grid-template-rows: auto 1fr;
+        grid-template-rows: auto 1fr auto;
         gap: 12px;
         padding: 14px;
         background: rgba(7, 14, 18, 0.92);
@@ -565,7 +581,7 @@
       .lightbox-bar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 12px;
         width: min(1120px, 100%);
         margin: 0 auto;
@@ -586,24 +602,6 @@
         background: #dbe8e4;
       }
 
-      .lightbox-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .lightbox-download {
-        display: inline-flex;
-        align-items: center;
-        min-height: 42px;
-        padding: 10px 15px;
-        border-radius: 8px;
-        background: var(--primary);
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: 700;
-      }
-
       .lightbox-image-wrap {
         display: grid;
         place-items: center;
@@ -616,6 +614,19 @@
         border-radius: 8px;
         object-fit: contain;
         box-shadow: 0 20px 54px rgba(0, 0, 0, 0.36);
+      }
+
+      .lightbox-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .lightbox-actions .button,
+      .lightbox-actions .lightbox-close {
+        min-height: 48px;
       }
       .footer {
         padding: 24px 18px;
@@ -642,8 +653,8 @@
         .hero {
           min-height: 88vh;
           background:
-            linear-gradient(180deg, rgba(7, 14, 18, 0.94), rgba(7, 14, 18, 0.72)),
-            url("https://ferrira19555.github.io/Portal-Roberto/assets/capa-portal-roberto.jpg") center / cover no-repeat,
+            linear-gradient(180deg, rgba(7, 14, 18, 0.88), rgba(7, 14, 18, 0.48)),
+            url("assets/capa-portal-roberto.jpg") center / cover no-repeat,
             #14201e;
           align-items: start;
           padding-top: 22px;
@@ -656,84 +667,6 @@
         .lead {
           font-size: 1.02rem;
         }
-      }
-      /* Visual papel pardo do Portal Roberto */
-      :root {
-        --bg: #c7aa80;
-        --ink: #3b2c20;
-        --muted: #6d5945;
-        --panel: #d5bc96;
-        --soft-panel: #ceb38b;
-        --line: #b3956e;
-        --shadow: 0 10px 26px rgba(70, 49, 30, 0.15);
-      }
-
-      body {
-        background-color: #c7aa80;
-        background-image:
-          radial-gradient(circle at 18% 12%, rgba(255,255,255,0.10), transparent 30%),
-          repeating-linear-gradient(8deg, rgba(70,42,20,0.035) 0, rgba(70,42,20,0.035) 1px, transparent 1px, transparent 6px);
-      }
-
-      .visual-band {
-        background: linear-gradient(180deg, #6d5945 0%, #c7aa80 100%);
-      }
-
-      .visual-inner,
-      .portal-section,
-      .download-card,
-      .unlock-panel {
-        background: #d5bc96;
-        border-color: #b3956e;
-      }
-
-      .album-card {
-        background: #ceb38b;
-        border-color: #b3956e;
-      }
-
-      .ache-panel {
-        background: #080808;
-        color: #ffffff;
-        border: 2px solid #d7aa38;
-        border-left: 8px solid #d7aa38;
-        box-shadow: 0 20px 46px rgba(0, 0, 0, 0.48);
-      }
-
-      .ache-panel h2,
-      .ache-panel h3 {
-        color: #ffffff;
-      }
-
-      .ache-panel > p,
-      .ache-panel label,
-      .ache-panel .found-card span {
-        color: #d7d7d7;
-      }
-
-      .ache-box,
-      .ache-panel .found-card {
-        background: #151515;
-        border-color: #454545;
-      }
-
-      .ache-panel input {
-        color: #ffffff;
-        background: #242424;
-        border-color: #555555;
-      }
-
-      .ache-panel input::placeholder {
-        color: #aaaaaa;
-      }
-
-      .ache-panel button {
-        background: #d7aa38;
-        color: #171006;
-      }
-
-      .ache-panel button:hover {
-        background: #f0c65b;
       }
     </style>
   </head>
@@ -750,8 +683,8 @@
 
         <h1>Portal do Roberto</h1>
         <p class="lead">
-          Aplicativos, ferramentas e fotografias em um so lugar. Conheca os projetos,
-          baixe os arquivos disponiveis e veja paisagens registradas na regiao.
+          Aplicativos, ferramentas e fotografias em um só lugar. Conheça os projetos,
+          baixe os arquivos disponíveis e veja paisagens registradas na região.
         </p>
         <div class="hero-actions">
           <a class="button" href="#downloadsTitle">Ver aplicativos</a>
@@ -771,7 +704,7 @@
             A pagina fica mais clara para clientes e mais facil de compartilhar pelo WhatsApp.
           </p>
         </div>
-        <img class="visual-photo" src="assets/foto-praia-noturna.jpg" alt="Vista noturna da cidade e do mar" />
+        <img class="visual-photo" src="assets/albuns/por-do-sol-e-paisagens/IMG_20240619_175235.jpg" alt="Vista da cidade, do mar e do pôr do sol" />
       </div>
     </section>
     <main class="content">
@@ -788,7 +721,7 @@
             <img src="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg" alt="Paisagem noturna com cidade, mar e ceu" />
             <div>
               <h3>Por do sol e paisagens</h3>
-              <p>Fotos de mar, ceu, cidade e luzes do fim do dia. Album com <span id="albumPhotoCount">22</span> fotos.</p>
+              <p>Fotos de mar, céu, cidade, natureza e luzes registradas na região.</p>
               <a class="button" href="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg" data-photo="assets/albuns/por-do-sol-e-paisagens/praia-noturna-2024-03-11.jpg">Abrir foto</a>
             </div>
           </article>
@@ -843,12 +776,12 @@
       </section>
 <section class="download-section" aria-labelledby="downloadsTitle">
         <h2 id="downloadsTitle" class="section-title">Baixe aqui</h2>
-        <section class="downloads" aria-label="Downloads do VendasControl">
+        <section class="downloads" aria-label="Aplicativos e arquivos para download">
         <article class="download-card trial">
           <h3>Teste de 240 horas</h3>
           <p>Use para testar o VendasControl antes da liberacao definitiva.</p>
-          <a class="button" href="apps/VendasControl-240horas.apk?v=20260625-readme" download>Baixar APK</a>
-          <span class="file-name">apps/VendasControl-240horas.apk</span>
+          <a class="button" href="https://github.com/ferrira19555/radio-mapa/releases/download/downloads/VendasControl-240horas.apk" download>Baixar ZIP</a>
+          <span class="file-name">https://github.com/ferrira19555/radio-mapa/releases/download/downloads/VendasControl-240horas.apk</span>
         </article>
 
         <article class="download-card update">
@@ -861,50 +794,57 @@
         <article class="download-card hallo">
           <h3>HalloControl</h3>
           <p>Versao exclusiva para leituras Hallo, sem Roleta, com teste de 48 horas.</p>
-          <a class="button" href="apps/HalloControl-48horas.apk" download>Baixar teste de 48 horas</a>
-          <span class="file-name">apps/HalloControl-48horas.apk</span>
+          <a class="button" href="HalloControl-48horas.apk" download>Baixar teste de 48 horas</a>
+          <span class="file-name">HalloControl-48horas.apk</span>
         </article>
 
         <article class="download-card beauty">
           <h3>BeautyControl</h3>
           <p>Gestao de salao em app Android, com dados salvos no proprio celular.</p>
           <a class="button" href="beauty.html">Abrir pagina do BeautyControl</a>
-          <span class="file-name">apps/BeautyControl-30D-local.apk</span>
+          <span class="file-name">https://github.com/ferrira19555/radio-mapa/releases/download/downloads/BeautyControl-30D-local.apk</span>
         </article>
 
-        <article class="download-card traffic">
+        <article class="download-card">
           <h3>Odometro transito</h3>
           <p>Cronometro analogico para acompanhar tempo, paradas e uso no transito.</p>
-          <a class="button" href="apps/CronometroAnalogico-v1.apk" download>Baixar odometro</a>
-          <span class="file-name">apps/CronometroAnalogico-v1.apk</span>
+          <a class="button" href="CronometroAnalogico-v1.apk" download>Baixar odometro</a>
+          <span class="file-name">CronometroAnalogico-v1.apk</span>
         </article>
 
         <article class="download-card gps">
           <h3>GPS Tracker velocimetro</h3>
           <p>Velocimetro GPS gratuito com distancia, media, pico e tempo parado em transito.</p>
-          <a class="button" href="apps/GpsTracker-velocimetro-analogico.apk?v=20260622-v16" download>Baixar gratis</a>
-          <span class="file-name">apps/GpsTracker-velocimetro-analogico.apk</span>
+          <a class="button" href="GpsTracker-velocimetro-analogico.apk" download>Baixar gratis</a>
+          <span class="file-name">GpsTracker-velocimetro-analogico.apk</span>
         </article>
 
         <article class="download-card radio">
           <h3>Radio Mapa</h3>
-          <p>Radio online gratuita com mapa, estacoes do Brasil e do mundo, busca e favoritos.</p>
+          <p>Radio online gratuita com mapa, estados do Brasil, busca por estacao e favoritos.</p>
           <a class="button" href="radio-mapa.html">Abrir Radio Mapa</a>
-          <span class="file-name">radio-mapa.html</span>
+          <span class="file-name">Gratis para usar online</span>
+        </article>
+
+        <article class="download-card traffic">
+          <h3>Transferidor com camera</h3>
+          <p>Aplicativo Android para medir angulos usando a camera do celular.</p>
+          <a class="button" href="https://github.com/ferrira19555/Portal-Roberto/releases/download/downloads/Transferidor-Camera-aviso-inferior.apk" download>Baixar APK</a>
+          <span class="file-name">Transferidor-Camera-aviso-inferior.apk</span>
         </article>
 
         <article class="download-card">
-          <h3>Nivel de Bolha</h3>
-          <p>Nivel digital gratuito, com visual tradicional e sensor de inclinacao do celular.</p>
-          <a class="button" href="apps/Nivel-de-Bolha-Portal-Roberto.apk" download>Baixar APK</a>
-          <span class="file-name">apps/Nivel-de-Bolha-Portal-Roberto.apk</span>
+          <h3>Comparador de precos</h3>
+          <p>Assistente de compras para comparar precos, quantidades e encontrar a melhor opcao.</p>
+          <a class="button" href="https://ferrira19555.github.io/Portal-Roberto/renato.html">Abrir comparador</a>
+          <span class="file-name">Ferramenta online, sem download</span>
         </article>
 
         <article class="download-card">
-          <h3>Z1V4</h3>
+          <h3>Z1V1</h3>
           <p>Gerenciador Android standalone de musicas e videos. Aceita nome, frase, refrao ou link.</p>
-          <a class="button" href="apps/Z1V4-Android.apk?v=20260616-0901" download>Baixar APK</a>
-          <span class="file-name">apps/Z1V4-Android.apk</span>
+          <a class="button" href="https://github.com/ferrira19555/radio-mapa/releases/download/downloads/Z1v1w.zip" download>Baixar ZIP</a>
+          <span class="file-name">https://github.com/ferrira19555/radio-mapa/releases/download/downloads/Z1v1w.zip</span>
         </article>
 
         </section>
@@ -993,7 +933,7 @@
         <article class="steps">
           <h2>Passo a passo</h2>
           <ol>
-            <li>Toque em Baixar APK.</li>
+            <li>Toque em Baixar ZIP.</li>
             <li>Abra o arquivo baixado no celular.</li>
             <li>Se o Android bloquear, toque em Configuracoes.</li>
             <li>Ative Permitir desta fonte.</li>
@@ -1017,17 +957,17 @@
     <div class="photo-lightbox" id="photoLightbox" hidden>
       <div class="lightbox-bar">
         <strong id="photoLightboxTitle">Foto do album</strong>
-        <div class="lightbox-actions">
-          <a class="lightbox-download" id="photoLightboxDownload" href="#" download>Baixar foto</a>
-          <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao album</button>
-        </div>
       </div>
       <div class="lightbox-image-wrap">
         <img id="photoLightboxImage" alt="Foto ampliada" />
       </div>
+      <div class="lightbox-actions">
+        <a class="button" id="photoDownload" href="#" download>Baixar foto</a>
+        <button class="lightbox-close" id="photoLightboxClose" type="button">Voltar ao álbum</button>
+      </div>
     </div>
     <footer class="footer">
-      VendasControl - download oficial do app Android
+      Portal do Roberto - aplicativos, ferramentas e fotografias
     </footer>
 
     <script>
@@ -1113,7 +1053,7 @@
       }
 
       function unlockUpdate() {
-        updateDownload.href = "apps/VendasControl-Atual.1.apk";
+        updateDownload.href = "https://github.com/ferrira19555/radio-mapa/releases/download/downloads/VendasControl-240horas.apk";
         updateDownload.textContent = "Baixar atualizacao";
         updateDownload.classList.remove("disabled");
         updateDownload.setAttribute("aria-disabled", "false");
@@ -1152,7 +1092,8 @@
       const photoLightboxImage = document.getElementById("photoLightboxImage");
       const photoLightboxTitle = document.getElementById("photoLightboxTitle");
       const photoLightboxClose = document.getElementById("photoLightboxClose");
-      const photoLightboxDownload = document.getElementById("photoLightboxDownload");
+      const photoDownload = document.getElementById("photoDownload");
+      let photoLightboxHistoryActive = false;
 
       function openPhotoLightbox(link) {
         const src = link.getAttribute("data-photo") || link.getAttribute("href");
@@ -1160,46 +1101,51 @@
         photoLightboxImage.src = src;
         photoLightboxImage.alt = image ? image.alt : "Foto ampliada";
         photoLightboxTitle.textContent = image ? image.alt : "Foto do album";
-        photoLightboxDownload.href = src;
+        photoDownload.href = src;
         photoLightbox.hidden = false;
         document.body.style.overflow = "hidden";
-        if (!history.state || !history.state.photoLightboxOpen) {
-          history.pushState({ photoLightboxOpen: true }, "", "#foto-aberta");
+        if (!photoLightboxHistoryActive) {
+          history.pushState({ photoLightbox: true }, "");
+          photoLightboxHistoryActive = true;
         }
       }
 
-      function closePhotoLightbox() {
+      function closePhotoLightbox(fromHistory = false) {
+        if (photoLightbox.hidden) return;
         photoLightbox.hidden = true;
         photoLightboxImage.removeAttribute("src");
-        photoLightboxDownload.href = "#";
         document.body.style.overflow = "";
-      }
-
-      function returnToAlbum() {
-        if (history.state && history.state.photoLightboxOpen) {
+        if (photoLightboxHistoryActive && !fromHistory) {
+          photoLightboxHistoryActive = false;
           history.back();
         } else {
-          closePhotoLightbox();
+          photoLightboxHistoryActive = false;
         }
       }
 
-      photoLightboxClose.addEventListener("click", returnToAlbum);
+      photoLightboxClose.addEventListener("click", closePhotoLightbox);
       photoLightbox.addEventListener("click", (event) => {
-        if (event.target === photoLightbox) returnToAlbum();
+        if (event.target === photoLightbox) closePhotoLightbox();
       });
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !photoLightbox.hidden) returnToAlbum();
+        if (event.key === "Escape" && !photoLightbox.hidden) closePhotoLightbox();
       });
       window.addEventListener("popstate", () => {
-        if (!photoLightbox.hidden) closePhotoLightbox();
+        if (!photoLightbox.hidden) closePhotoLightbox(true);
       });
 
       const albumPhotoStrip = document.getElementById("albumPhotoStrip");
       const albumPhotoCount = document.getElementById("albumPhotoCount");
+      const albumSection = document.getElementById("albuns");
+      const downloadSection = document.querySelector(".download-section");
+
+      if (albumSection && downloadSection) {
+        downloadSection.insertAdjacentElement("afterend", albumSection);
+      }
 
       function renderAlbumPhotos(photos) {
         if (!albumPhotoStrip) return;
-        albumPhotoCount.textContent = String(photos.length);
+        if (albumPhotoCount) albumPhotoCount.textContent = String(photos.length);
         albumPhotoStrip.innerHTML = photos.map((photo) => `
           <a href="${photo.url}" data-photo="${photo.url}">
             <img src="${photo.url}" alt="${escapeHtml(photo.name.replace(/\.[^.]+$/, "").replace(/[_-]/g, " "))}" />
@@ -1208,13 +1154,20 @@
       }
 
       async function loadAlbumPhotos() {
-        try {
-          const response = await fetch("/api/album/photos");
-          if (!response.ok) return;
-          const data = await response.json();
-          renderAlbumPhotos(data.photos || []);
-        } catch (error) {
-          // Mantem as fotos fixas se o portal for aberto sem o servidor local.
+        const sources = [
+          "/api/album/photos",
+          "assets/albuns/por-do-sol-e-paisagens/album.json",
+        ];
+        for (const source of sources) {
+          try {
+            const response = await fetch(source, { cache: "no-store" });
+            if (!response.ok) continue;
+            const data = await response.json();
+            renderAlbumPhotos(data.photos || []);
+            return;
+          } catch (error) {
+            // Tenta a proxima fonte; as fotos fixas continuam como ultimo recurso.
+          }
         }
       }
 
@@ -1316,6 +1269,13 @@
     </script>
   </body>
 </html>
+
+
+
+
+
+
+
 
 
 
