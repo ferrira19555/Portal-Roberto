@@ -11,6 +11,7 @@
     :root{--bg:#07131d;--panel:#0d2130;--line:#27485b;--gold:#f1b84b;--coral:#e9774d;--text:#f7f2e8;--muted:#a9bac4;--ok:#6ed2a4;--error:#ff8a86;--shadow:0 18px 50px #0007}
     *{box-sizing:border-box}html{color-scheme:dark}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#173a50 0,#07131d 42rem);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
     button,textarea,input{font:inherit}button{touch-action:manipulation}.shell{width:min(760px,calc(100% - 24px));margin:auto;padding:20px 0 42px}
+    body.license-locked .shell{display:none}body.license-unlocked .license-gate{display:none}.license-gate{min-height:100vh;display:grid;place-items:center;padding:18px}.license-card{width:min(430px,100%);padding:24px;border:1px solid #386278;border-radius:20px;background:linear-gradient(145deg,#102a3b,#0b1d2a);box-shadow:var(--shadow);text-align:center}.license-mark{display:grid;width:62px;height:62px;margin:0 auto 12px;place-items:center;border:1px solid #f1b84b88;border-radius:17px;background:#f1b84b18;color:var(--gold);font-size:2rem}.license-card h1{margin:0 0 8px;font-size:1.35rem}.license-card p{color:var(--muted);font-size:.88rem;line-height:1.45}.license-id{display:grid;gap:6px;margin:15px 0;text-align:left}.license-id input,.license-form input{height:46px;padding:0 12px;text-align:center;font-weight:900;letter-spacing:.08em}.license-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.license-buttons button,.license-form button{min-height:44px;border:0;border-radius:10px;padding:8px;background:#18394b;color:var(--text);font-weight:850}.license-form{display:grid;gap:10px;margin-top:14px}.license-form button{background:linear-gradient(135deg,var(--gold),#dc8e2c);color:#251707}.license-terms{display:flex;align-items:flex-start;gap:8px;text-align:left;color:var(--muted);font-size:.76rem;line-height:1.35}.license-terms input{width:18px;height:18px;flex:0 0 auto;margin:0}.license-message{min-height:20px;margin:8px 0 0;color:var(--gold);font-size:.8rem}
     header{display:flex;align-items:center;gap:14px;padding:10px 4px 22px}.mark{display:grid;width:52px;height:52px;place-items:center;border:1px solid #f1b84b88;border-radius:15px;background:linear-gradient(145deg,#f1b84b22,#e9774d22);color:var(--gold);font-size:1.7rem}.brand small{color:var(--gold);font-size:.7rem;font-weight:800;letter-spacing:.18em}.brand h1{margin:2px 0 0;font-size:clamp(1.35rem,5vw,2rem);letter-spacing:.04em}.brand h1 span{color:var(--gold)}
     .promise{margin:0 0 16px;padding:15px 17px;border:1px solid var(--line);border-radius:15px;background:#0a1b28cc;color:var(--muted);line-height:1.5}.promise strong{color:var(--text)}.privacy{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.privacy span{padding:6px 9px;border:1px solid #2d5265;border-radius:999px;background:#102735;color:#bcd0da;font-size:.75rem;font-weight:700}
     .panel{padding:clamp(18px,5vw,30px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#102a3bea,#0b1d2aea);box-shadow:var(--shadow)}.panel h2{margin:0 0 7px;font-size:1.35rem}.lead{margin:0 0 20px;color:var(--muted);line-height:1.5}
@@ -21,7 +22,22 @@
     @media(max-width:560px){.shell{width:min(100% - 16px,760px);padding-top:10px}.panel{border-radius:16px}.strength{width:100%;margin:0}.promise{font-size:.9rem}.main-actions{grid-template-columns:1fr}.actions{grid-template-columns:repeat(3,1fr)}.actions button{padding:7px 4px;font-size:.76rem}}
   </style>
 </head>
-<body>
+<body class="license-locked">
+  <section class="license-gate" aria-labelledby="licenseTitle">
+    <div class="license-card">
+      <div class="license-mark" aria-hidden="true">⌁</div>
+      <h1 id="licenseTitle">Liberar Enigma Mensagens</h1>
+      <p>Após o pagamento pelo WhatsApp, envie o ID abaixo e receba seu código de liberação.</p>
+      <label class="license-id">ID deste navegador<input id="licenseDeviceId" readonly></label>
+      <div class="license-buttons"><button id="copyLicenseId" type="button">Copiar ID</button><button id="copyLicenseRequest" type="button">Copiar pedido</button></div>
+      <form id="licenseForm" class="license-form">
+        <input id="licenseCode" autocomplete="off" placeholder="Código de liberação" required>
+        <label class="license-terms"><input id="licenseTerms" type="checkbox" required><span>Declaro que utilizarei a ferramenta somente para finalidades lícitas e assumo responsabilidade pelo conteúdo.</span></label>
+        <button type="submit">Liberar acesso</button>
+      </form>
+      <p id="licenseMessage" class="license-message" role="status"></p>
+    </div>
+  </section>
   <main class="shell">
     <header><div class="mark" aria-hidden="true">⌁</div><div class="brand"><small>MUNDO PRÁTICO</small><h1>ENIGMA <span>MENSAGENS</span></h1></div></header>
     <p class="promise"><strong>Proteja no seu aparelho.</strong> A mensagem e o código secreto não são enviados ao portal. Você compartilha somente o texto criptografado.</p>
@@ -35,12 +51,21 @@
       <div class="main-actions"><button id="encryptBtn" class="primary" type="button">Criptografar</button><button id="decryptBtn" class="primary decrypt" type="button">Descriptografar</button></div>
       <p id="notice" class="notice" role="status"></p>
     </section>
-    <details><summary>Como usar com segurança</summary><div><p>Combine o código pessoalmente ou por um meio diferente daquele usado para enviar a mensagem.</p><p>Não envie o código junto com o bloco criptografado. Prefira um código longo e exclusivo; seis números não oferecem proteção suficiente contra tentativas automatizadas.</p><p>A ferramenta protege o conteúdo, mas não oculta quem enviou, quem recebeu, horários ou dados registrados pelo aplicativo usado para transportar o bloco.</p><p>Se o código for perdido, a mensagem não poderá ser recuperada. Use esta ferramenta como apoio e não como garantia de anonimato.</p></div></details>
+    <details><summary>Como usar com segurança</summary><div><p>Combine o código pessoalmente ou por um meio diferente daquele usado para enviar a mensagem.</p><p>Não envie o código junto com o bloco criptografado. Prefira um código longo e exclusivo; seis números não oferecem proteção suficiente contra tentativas automatizadas.</p><p>A ferramenta protege o conteúdo, mas não oculta quem enviou, quem recebeu, horários ou dados registrados pelo aplicativo usado para transportar o bloco.</p><p>Se o código for perdido, a mensagem não poderá ser recuperada. Use esta ferramenta como apoio e não como garantia de anonimato.</p><p><strong>Uso lícito:</strong> é proibido utilizar a ferramenta para ameaças, fraudes, exploração, perseguição, ocultação de crimes ou qualquer outra finalidade ilegal. O usuário é responsável pelo conteúdo processado e compartilhado.</p></div></details>
     <footer>Processamento local com Web Crypto API · PBKDF2-SHA-256 (600.000 iterações) · AES-256-GCM<br><a href="portal-index.html">Voltar ao portal Mundo Prático</a></footer>
   </main>
   <script>
     'use strict';
     const $=id=>document.getElementById(id),encoder=new TextEncoder(),decoder=new TextDecoder(),ITERATIONS=600000;
+    const LICENSE_SECRET='EnigmaMensagens.Portal.Liberacao.2026.v1',LICENSE_ALPHABET='23456789ABCDEFGHJKLMNPQRSTUVWXYZ',LICENSE_DEVICE_KEY='enigmaMensagens.device.v1',LICENSE_KEY='enigmaMensagens.license.v1';
+    const cleanLicense=value=>String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    function licenseHash(text){let hash=0x811c9dc5;for(let i=0;i<text.length;i++){hash^=text.charCodeAt(i);hash=Math.imul(hash,0x01000193)>>>0}return hash>>>0}
+    function licenseEncode(number,length){let output='';for(let i=0;i<length;i++){output=LICENSE_ALPHABET[number&31]+output;number>>>=5}return output}
+    function licenseCodeFor(deviceId){const id=cleanLicense(deviceId);if(id.length<8)return'';const a=licenseHash(`${LICENSE_SECRET}|A|${id}`),b=licenseHash(`${id}|B|${LICENSE_SECRET}`),c=licenseHash(`${a}|${id}|${b}`)%LICENSE_ALPHABET.length;return(licenseEncode(a,6)+licenseEncode(b,5)+LICENSE_ALPHABET[c]).replace(/(.{4})(?=.)/g,'$1-')}
+    function makeLicenseDeviceId(){const bytes=crypto.getRandomValues(new Uint8Array(8));let text='';bytes.forEach(byte=>text+=LICENSE_ALPHABET[byte%LICENSE_ALPHABET.length]);return`EM-${text.slice(0,4)}-${text.slice(4)}`}
+    function licenseDeviceId(){let id=localStorage.getItem(LICENSE_DEVICE_KEY);if(!id){id=makeLicenseDeviceId();localStorage.setItem(LICENSE_DEVICE_KEY,id)}return id}
+    function unlockLicensedPage(){document.body.classList.remove('license-locked');document.body.classList.add('license-unlocked')}
+    function initLicense(){const id=licenseDeviceId();$('licenseDeviceId').value=id;let saved=null;try{saved=JSON.parse(localStorage.getItem(LICENSE_KEY)||'null')}catch{}if(saved&&saved.id===id&&cleanLicense(saved.code)===cleanLicense(licenseCodeFor(id))){unlockLicensedPage();return}$('copyLicenseId').onclick=()=>copyText(id);$('copyLicenseRequest').onclick=()=>copyText(`Olá! Efetuei o pagamento do Enigma Mensagens. Meu ID é ${id}. Preciso do código de liberação.`);$('licenseCode').oninput=event=>event.target.value=event.target.value.toUpperCase();$('licenseForm').onsubmit=event=>{event.preventDefault();const code=$('licenseCode').value;if(cleanLicense(code)!==cleanLicense(licenseCodeFor(id))){$('licenseMessage').textContent='Código inválido para este navegador.';return}localStorage.setItem(LICENSE_KEY,JSON.stringify({id,code:cleanLicense(code),activatedAt:new Date().toISOString(),termsAcceptedAt:new Date().toISOString()}));unlockLicensedPage()}}
     const toB64Url=bytes=>{let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
     const fromB64Url=value=>{const normalized=value.replace(/-/g,'+').replace(/_/g,'/');const binary=atob(normalized+'='.repeat((4-normalized.length%4)%4));return Uint8Array.from(binary,c=>c.charCodeAt(0))};
     async function deriveKey(secret,salt,iterations){const material=await crypto.subtle.importKey('raw',encoder.encode(secret.normalize('NFKC')),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
@@ -59,7 +84,7 @@
     $('copyBtn').addEventListener('click',()=>{const text=$('messageBox').value;if(text)copyText(text);else setNotice('Não há conteúdo para copiar.','error')});$('clearBtn').addEventListener('click',clearAll);
     $('encryptBtn').addEventListener('click',async()=>{const text=$('messageBox').value,secret=$('secret').value;try{setNotice('');if(!window.crypto?.subtle)throw new Error('Este navegador não oferece a criptografia necessária.');if(!text.trim())throw new Error('Escreva uma mensagem primeiro.');if(text.trim().startsWith('EMP1.'))throw new Error('Este conteúdo já parece estar criptografado.');if(secret.length<12)throw new Error('Use um código secreto com pelo menos 12 caracteres.');$('encryptBtn').disabled=true;$('decryptBtn').disabled=true;$('encryptBtn').textContent='Criptografando…';$('messageBox').value=await protectText(text,secret);updateBox();setNotice('Mensagem criptografada. Agora toque em Copiar.','ok')}catch(error){setNotice(error.message,'error')}finally{$('encryptBtn').disabled=false;$('decryptBtn').disabled=false;$('encryptBtn').textContent='Criptografar'}});
     $('decryptBtn').addEventListener('click',async()=>{const original=$('messageBox').value.trim(),packet=cleanPacket(original),secret=$('secret').value;try{setNotice('');if(!packet)throw new Error('Cole a mensagem criptografada primeiro.');if(!secret)throw new Error('Digite o código secreto.');$('encryptBtn').disabled=true;$('decryptBtn').disabled=true;$('decryptBtn').textContent='Descriptografando…';$('messageBox').value=await openText(packet,secret);updateBox();setNotice(packet!==original?'Bloco duplicado corrigido e mensagem aberta.':'Código correto. A mensagem foi aberta nesta caixa.','ok')}catch(error){const safe=error.message.includes('Formato')||error.message.includes('Parâmetros')||error.message.includes('incompleta')?error.message:'Não foi possível abrir. Confira o código e a mensagem completa.';setNotice(safe,'error')}finally{$('encryptBtn').disabled=false;$('decryptBtn').disabled=false;$('decryptBtn').textContent='Descriptografar'}});
-    window.addEventListener('pagehide',()=>{$('secret').value=''});updateBox();updateStrength();
+    window.addEventListener('pagehide',()=>{$('secret').value=''});initLicense();updateBox();updateStrength();
   </script>
 </body>
 </html>
