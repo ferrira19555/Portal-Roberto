@@ -1,6 +1,6 @@
 'use strict';
-const CACHE='texto-rapido-v4';
-const FILES=['./','./index.html','./manifest.webmanifest','./icons/texto-180.png','./icons/texto-192.png','./icons/texto-512.png'];
+const CACHE='enigma-mensagens-v5';
+const FILES=['./enigma-mensagens.html','./manifest.webmanifest','./icons/texto-180.png','./icons/texto-192.png','./icons/texto-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
@@ -11,7 +11,7 @@ self.addEventListener('fetch',event=>{
       const copy=response.clone();
       caches.open(CACHE).then(cache=>cache.put(event.request,copy));
       return response;
-    }).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./index.html'))));
+    }).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./enigma-mensagens.html'))));
     return;
   }
   event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{
