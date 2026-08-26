@@ -101,7 +101,8 @@
       try{sessionStorage.clear()}catch{}
       try{if('caches'in window){const names=await caches.keys();await Promise.all(names.map(name=>caches.delete(name)))}}catch{}
       history.replaceState(null,'',location.pathname);
-      location.replace('../index.html');
+      window.close();
+      setTimeout(()=>location.replace('../index.html'),250);
     }
     $('closeAppBtn').addEventListener('click',closeApp);
     document.addEventListener('visibilitychange',()=>{if(document.hidden)clearReadableMessage()});window.addEventListener('pagehide',clearReadableMessage);window.addEventListener('beforeunload',clearReadableMessage);window.addEventListener('blur',clearSecret);initLicense();updateBox();updateStrength();
