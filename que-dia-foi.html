@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#091522">
+  <meta name="description" content="Descubra em qual dia da semana caiu qualquer data do passado ou cairá uma data futura.">
+  <title>Que dia foi?</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23091522'/%3E%3Crect x='12' y='16' width='40' height='36' rx='7' fill='%23f5f0e8'/%3E%3Cpath d='M12 27h40' stroke='%23ff6b4a' stroke-width='6'/%3E%3Ccircle cx='24' cy='39' r='4' fill='%2300c2c7'/%3E%3Ccircle cx='40' cy='39' r='4' fill='%23091522'/%3E%3C/svg%3E">
+  <style>
+    :root{color-scheme:dark;--ink:#07111d;--navy:#091522;--paper:#f7f3eb;--muted:#9dafbd;--coral:#ff6846;--cyan:#17c8ca;--line:rgba(255,255,255,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 10%,#173653 0,transparent 34%),radial-gradient(circle at 90% 85%,#123e43 0,transparent 28%),var(--navy);color:var(--paper);display:grid;place-items:center;padding:24px;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 82%)}
+    main{width:min(960px,100%);position:relative}
+    .eyebrow{display:flex;align-items:center;gap:10px;color:var(--cyan);font-size:.82rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px}
+    .eyebrow::before{content:"";width:34px;height:3px;border-radius:99px;background:var(--cyan)}
+    .panel{background:rgba(7,17,29,.78);border:1px solid var(--line);border-radius:32px;box-shadow:0 28px 80px rgba(0,0,0,.38);backdrop-filter:blur(16px);overflow:hidden;display:grid;grid-template-columns:1fr 1.03fr}
+    .intro,.calculator{padding:clamp(28px,5vw,58px)}
+    .intro{position:relative;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;min-height:510px}
+    .intro::after{content:"7";position:absolute;right:-5px;bottom:-70px;font-size:21rem;font-weight:900;line-height:1;color:rgba(255,255,255,.035);pointer-events:none}
+    h1{font-size:clamp(3rem,7vw,5.8rem);line-height:.88;letter-spacing:-.065em;margin:0;max-width:7ch}
+    h1 span{color:var(--coral)}
+    .intro p{font-size:1.06rem;line-height:1.65;color:var(--muted);max-width:35ch;margin:30px 0 0}
+    .note{display:flex;align-items:center;gap:12px;color:#d4dee5;font-size:.92rem;position:relative;z-index:1}
+    .note i{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 7px rgba(23,200,202,.12)}
+    .calculator{background:rgba(255,255,255,.035);display:flex;flex-direction:column;justify-content:center}
+    label{font-size:.9rem;font-weight:750;letter-spacing:.04em;color:#dce5ea;margin-bottom:10px}
+    .date-wrap{position:relative}
+    input[type=date]{width:100%;border:1px solid rgba(255,255,255,.2);border-radius:16px;background:#101f2d;color:var(--paper);font:inherit;font-size:1.06rem;padding:17px 18px;outline:none;transition:.2s}
+    input[type=date]:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(23,200,202,.13)}
+    input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer}
+    .actions{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
+    button{border:0;border-radius:15px;padding:15px 18px;font:inherit;font-weight:800;cursor:pointer;transition:transform .18s,filter .18s}
+    button:hover{transform:translateY(-2px);filter:brightness(1.07)}
+    button:active{transform:translateY(0)}
+    .primary{background:var(--coral);color:#1b0b06}
+    .secondary{background:transparent;color:var(--paper);border:1px solid rgba(255,255,255,.2)}
+    .result{margin-top:28px;border-radius:22px;background:var(--paper);color:var(--ink);padding:25px;min-height:186px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+    .result::after{content:"";position:absolute;width:130px;height:130px;border:26px solid rgba(23,200,202,.13);border-radius:50%;right:-48px;top:-47px}
+    .result small{font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#597080}
+    .weekday{font-size:clamp(2.3rem,6vw,4.3rem);line-height:1;font-weight:900;letter-spacing:-.055em;margin:10px 0 8px;color:#0b2637;position:relative;z-index:1}
+    .full-date{font-size:1rem;color:#49606f;line-height:1.5;position:relative;z-index:1}
+    .relative{margin-top:10px;color:#0b7377;font-size:.9rem;font-weight:750}
+    .placeholder .weekday{color:#a7b0b5;font-size:2rem;letter-spacing:-.03em}
+    footer{text-align:center;color:#78909f;font-size:.82rem;margin-top:18px}
+    @media(max-width:760px){body{padding:14px}.panel{grid-template-columns:1fr;border-radius:24px}.intro{min-height:auto;border-right:0;border-bottom:1px solid var(--line);padding-bottom:34px}.intro p{margin-top:20px}.note{margin-top:34px}.calculator{padding-top:34px}.actions{grid-template-columns:1fr}.secondary{order:2}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Calendário universal</div>
+    <section class="panel">
+      <div class="intro">
+        <div>
+          <h1>Que dia <span>foi?</span></h1>
+          <p>Escolha qualquer data do passado ou do futuro e descubra, na hora, em qual dia da semana ela caiu — ou cairá.</p>
+        </div>
+        <div class="note"><i></i><span>Funciona sem internet e sem limite de consultas.</span></div>
+      </div>
+
+      <div class="calculator">
+        <label for="date">Escolha uma data</label>
+        <div class="date-wrap"><input id="date" type="date" autocomplete="off"></div>
+        <div class="actions">
+          <button class="primary" id="calculate" type="button">Descobrir o dia</button>
+          <button class="secondary" id="today" type="button">Hoje</button>
+        </div>
+
+        <div class="result placeholder" id="result" aria-live="polite">
+          <small>Resultado</small>
+          <div class="weekday" id="weekday">Sua resposta aparece aqui</div>
+          <div class="full-date" id="fullDate">Selecione uma data acima.</div>
+          <div class="relative" id="relative"></div>
+        </div>
+      </div>
+    </section>
+    <footer>Cálculo feito no seu próprio aparelho. · <a href="index.html" style="color:#17c8ca">Voltar ao portal Mundo Prático</a></footer>
+  </main>
+
+  <script>
+    const input = document.querySelector('#date');
+    const result = document.querySelector('#result');
+    const weekday = document.querySelector('#weekday');
+    const fullDate = document.querySelector('#fullDate');
+    const relative = document.querySelector('#relative');
+    const weekdays = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+
+    function parseLocalDate(value) {
+      const parts = value.split('-').map(Number);
+      if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+      const date = new Date(parts[0], parts[1] - 1, parts[2], 12);
+      if (date.getFullYear() !== parts[0] || date.getMonth() !== parts[1] - 1 || date.getDate() !== parts[2]) return null;
+      return date;
+    }
+
+    function calendarDaysBetween(a, b) {
+      const utcA = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+      const utcB = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+      return Math.round((utcA - utcB) / 86400000);
+    }
+
+    function showResult() {
+      const date = parseLocalDate(input.value);
+      if (!date) {
+        weekday.textContent = 'Escolha uma data válida';
+        fullDate.textContent = 'Use o calendário para continuar.';
+        relative.textContent = '';
+        result.classList.add('placeholder');
+        return;
+      }
+      const today = new Date();
+      const difference = calendarDaysBetween(date, today);
+      const formatted = new Intl.DateTimeFormat('pt-BR', {day:'numeric',month:'long',year:'numeric'}).format(date);
+      weekday.textContent = weekdays[date.getDay()];
+      fullDate.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      relative.textContent = difference === 0 ? 'É hoje.' : difference < 0 ? `Foi há ${Math.abs(difference).toLocaleString('pt-BR')} dia${difference === -1 ? '' : 's'}.` : `Será daqui a ${difference.toLocaleString('pt-BR')} dia${difference === 1 ? '' : 's'}.`;
+      result.classList.remove('placeholder');
+    }
+
+    document.querySelector('#calculate').addEventListener('click', showResult);
+    input.addEventListener('change', showResult);
+    document.querySelector('#today').addEventListener('click', () => {
+      const now = new Date();
+      input.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      showResult();
+    });
+  </script>
+</body>
+</html>
